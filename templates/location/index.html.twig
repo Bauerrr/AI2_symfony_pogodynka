@@ -17,25 +17,33 @@
             </tr>
         </thead>
         <tbody>
-        {% for location in locations %}
-            <tr>
-                <td>{{ location.id }}</td>
-                <td>{{ location.city }}</td>
-                <td>{{ location.country }}</td>
-                <td>{{ location.latitude }}</td>
-                <td>{{ location.longitude }}</td>
-                <td>
-                    <a href="{{ path('app_location_show', {'id': location.id}) }}">show</a>
-                    <a href="{{ path('app_location_edit', {'id': location.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        {% if is_granted('ROLE_LOCATION_INDEX') %}
+            {% for location in locations %}
+                <tr>
+                    <td>{{ location.id }}</td>
+                    <td>{{ location.city }}</td>
+                    <td>{{ location.country }}</td>
+                    <td>{{ location.latitude }}</td>
+                    <td>{{ location.longitude }}</td>
+                    <td>
+                        {% if is_granted('ROLE_LOCATION_SHOW') %}
+                            <a href="{{ path('app_location_show', {'id': location.id}) }}">show</a>
+                        {% endif %}
 
-    <a href="{{ path('app_location_new') }}">Create new</a>
+                        {% if is_granted('ROLE_LOCATION_EDIT') %}
+                            <a href="{{ path('app_location_edit', {'id': location.id}) }}">edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table> 
+    {% if is_granted('ROLE_LOCATION_NEW') %}
+        <a href="{{ path('app_location_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

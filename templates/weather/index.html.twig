@@ -17,25 +17,33 @@
             </tr>
         </thead>
         <tbody>
-        {% for weather in weather %}
-            <tr>
-                <td>{{ weather.id }}</td>
-                <td>{{ weather.date ? weather.date|date('Y-m-d') : '' }}</td>
-                <td>{{ weather.celsius }}</td>
-                <td>{{ weather.type }}</td>
-                <td>{{ weather.humidity }}</td>
-                <td>
-                    <a href="{{ path('app_weather_show', {'id': weather.id}) }}">show</a>
-                    <a href="{{ path('app_weather_edit', {'id': weather.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
+        {% if is_granted('ROLE_WEATHER_INDEX') %}
+            {% for weather in weather %}
+                <tr>
+                    <td>{{ weather.id }}</td>
+                    <td>{{ weather.date ? weather.date|date('Y-m-d') : '' }}</td>
+                    <td>{{ weather.celsius }}</td>
+                    <td>{{ weather.type }}</td>
+                    <td>{{ weather.humidity }}</td>
+                    <td>
+                        {% if is_granted('ROLE_WEATHER_SHOW') %}
+                            <a href="{{ path('app_weather_show', {'id': weather.id}) }}">show</a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_WEATHER_EDIT') %}
+                            <a href="{{ path('app_weather_edit', {'id': weather.id}) }}">edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_weather_new') }}">Create new</a>
+    {% if is_granted('ROLE_WEATHER_NEW') %}
+        <a href="{{ path('app_weather_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
