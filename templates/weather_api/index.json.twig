@@ -1,0 +1,13 @@
+{
+    "city": "{{ app.request.query.get('city') }}",
+    "country": "{{ app.request.query.get('country') }}",
+    "weathers": [
+        {% for weather in weathers %}
+            {
+                "date": "{{ weather.date | date('Y-m-d')}}",
+                "celsius": "{{ weather.celsius }}",
+                "fahrenheit": "{{ weather.fahrenheit }}"
+            }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}

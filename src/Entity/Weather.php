@@ -94,4 +94,11 @@ class Weather
 
         return $this;
     }
+
+    public function getFahrenheit(): ?string
+    {
+        $fahrenheit = (floatval($this->getCelsius()) * 9/5) + 32;
+
+        return strval($fahrenheit);
+    }
 }

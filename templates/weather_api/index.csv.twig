@@ -1,0 +1,4 @@
+city,country,date,celsius,fahrenheit\n,
+{% for weather in weathers %}
+{{ app.request.query.get('city') }},{{ app.request.query.get('country') }},{{ weather.date | date('Y-m-d') }},{{ weather.celsius }},{{ weather.fahrenheit }},
+{% endfor %}
